@@ -218,3 +218,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Data lake (datos generados)
+datalake/*
+!datalake/README.md
+
+# Airflow y Spark
+airflow/logs/
+spark-checkpoints/
+__pycache__/
+.pytest_cache/
+.env
