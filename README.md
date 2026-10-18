@@ -25,6 +25,7 @@ acumula la flota, qué fallas ocurren y qué vehículos están en riesgo, y gene
 cuando hay un mantenimiento vencido o un parámetro mecánico crítico.
 
 ## Arquitectura
+
 ```mermaid
 flowchart TD
     A["Generador de telemetría de flota (producer/)"] --> B["Kafka: topic rapidgo.flota.v8<br/>key = vehiculo_id, 3 particiones"]
@@ -33,6 +34,18 @@ flowchart TD
     D --> E["Airflow<br/>calidad → agregación → reporte"]
     E --> F["KPIs y alertas<br/>km acumulados, fallas por tipo, vehículos en riesgo"]
 ```
+
+![Arquitectura del pipeline RapidGo V8](docs/arquitectura.png)
+
+| Componente | Rol en la variante 8 |
+|---|---|
+| Producer (Python) | Simula los vehículos de reparto y envía cada lectura como evento JSON |
+| Kafka | Recibe los eventos en el topic `rapidgo.flota.v8`, con key `vehiculo_id` y 3 particiones |
+| Spark Structured Streaming | Lee de Kafka, parsea los eventos, aplica transformaciones y calcula KPIs por ventana de 5 minutos |
+| Data Lake (Parquet) | Guarda los datos en las capas raw, processed y curated |
+| Airflow | Orquesta las tareas de calidad, agregación y reporte |
+| Docker | Levanta todos los servicios de forma local |
+| GitHub Actions | Valida el código automáticamente en cada Pull Request |
 
 Transversal: Docker + Git + GitHub + Kanban + GitHub Actions + Releases.
 
