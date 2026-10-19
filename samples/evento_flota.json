@@ -1,0 +1,11 @@
+{
+  "event_id": "9d4e1c7a-2b6f-4f0e-8a3d-5c1b7e9f2a40",
+  "vehiculo_id": "VEH-007",
+  "tipo_vehiculo": "moto",
+  "timestamp": "2026-10-19T14:20:05Z",
+  "kilometraje": 18450.7,
+  "km_ultimo_mantenimiento": 14200.0,
+  "temperatura_motor_c": 112.4,
+  "codigo_falla": "P0217",
+  "horas_uso": 6.5
+}
