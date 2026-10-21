@@ -39,6 +39,12 @@ cuando hay un mantenimiento vencido o un parámetro mecánico crítico.
 
 Transversal: Docker + Git + GitHub + Kanban + GitHub Actions + Releases.
 
+## Documentación
+- [Contrato del evento](docs/contrato-evento.md)
+- [KPIs y reglas de alerta](docs/kpis-y-alertas.md)
+- [ADR-001: key y particiones de Kafka](docs/decisions/ADR-001-key-y-particiones-kafka.md)
+- [Checkpoint Semana 1](docs/checkpoints/semana1.md)
+
 ## Estado del proyecto
 - [x] Semana 1: diseño y organización (v0.1.0-foundation)
 - [ ] Semana 2: pipeline Kafka → Spark → Data Lake y CI
