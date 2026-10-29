@@ -86,7 +86,7 @@ Capturas
 
 - <img width="921" height="374" alt="image" src="https://github.com/user-attachments/assets/22d2f224-3895-4977-96c2-4feba86c23e7" />
 
-
+Pull Request de este ADR: https://github.com/laurajimenaherreno-gif/rapidgo-v8-mantenimiento-flota/pull/28
 
 ## Consecuencias / trade-offs
 Lo que ganamos es que cada vehículo queda siempre en una sola partición y sus lecturas se mantienen en orden. Se ve en la tabla de verificación, donde ningún vehículo aparece en dos particiones. Tampoco hubo que cambiar el código del producer.
