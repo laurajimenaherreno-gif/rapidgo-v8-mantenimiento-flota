@@ -7,14 +7,61 @@ services:
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      # 9092 = para programas de tu PC (producer); 29092 = para otros contenedores (Spark)
+      KAFKA_LISTENERS: PLAINTEXT://:29092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      # El topic se crea a mano con 3 particiones (ADR-001); si se creara solo tendria 1.
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-# Preliminar (Semana 1). En las semanas 2 y 3 se agregarán Spark y Airflow.
+  # Job de Spark Structured Streaming. No arranca con "docker compose up";
+  # se lanza con: docker compose run --rm spark
+  spark:
+    image: spark:4.2.0-python3
+    profiles: ["jobs"]
+    depends_on:
+      - kafka
+    working_dir: /opt/app
+    environment:
+      KAFKA_BOOTSTRAP: kafka:29092
+      KAFKA_TOPIC: rapidgo.flota.v8
+      DATALAKE: /opt/app/datalake
+      VENTANA: "${VENTANA:-5 minutes}"
+      WATERMARK: "${WATERMARK:-1 minute}"
+      SALIDA: "${SALIDA:-parquet}"
+    volumes:
+      - ./spark:/opt/app/spark
+      - ./datalake:/opt/app/datalake
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - local[2]
+      - --packages
+      - org.apache.spark:spark-sql-kafka-0-10_2.13:4.2.0
+      - --conf
+      - spark.jars.ivy=/tmp/.ivy2
+      - --py-files
+      - /opt/app/spark/reglas.py
+      - /opt/app/spark/streaming_flota.py
+
+  # Lee el Data Lake y muestra conteos, particiones y offsets reales.
+  # Se lanza con: docker compose run --rm verificar
+  verificar:
+    image: spark:4.2.0-python3
+    profiles: ["jobs"]
+    working_dir: /opt/app
+    volumes:
+      - ./spark:/opt/app/spark
+      - ./datalake:/opt/app/datalake
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - local[1]
+      - /opt/app/spark/ver_datalake.py
