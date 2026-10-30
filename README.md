@@ -44,10 +44,13 @@ Transversal: Docker + Git + GitHub + Kanban + GitHub Actions + Releases.
 - [KPIs y reglas de alerta](docs/kpis-y-alertas.md)
 - [ADR-001: key y particiones de Kafka](docs/decisions/ADR-001-key-y-particiones-kafka.md)
 - [Checkpoint Semana 1](docs/checkpoints/semana1.md)
+- [Checkpoint Semana 2](docs/checkpoints/semana2.md)
+- [Cómo ejecutar el pipeline en local](docs/ejecucion-local.md)
+- [Decisiones de CI](docs/ci-decisiones.md)
 
 ## Estado del proyecto
 - [x] Semana 1: diseño y organización (v0.1.0-foundation)
-- [ ] Semana 2: pipeline Kafka → Spark → Data Lake y CI
+- [x] Semana 2: pipeline Kafka → Spark → Data Lake y CI
 - [ ] Semana 3: Airflow, calidad y resiliencia
 - [ ] Semana 4: integración y release v1.0.0
 
