@@ -34,8 +34,7 @@ Después de cambiar la variable a `"no"` y limpiar la tarea, `calidad_datos` ter
 
 
 ## Pull Request
-
-https://github.com/laurajimenaherreno-gif/rapidgo-v8-mantenimiento-flota/pull/31
+https://github.com/laurajimenaherreno-gif/rapidgo-v8-mantenimiento-flota/pull/33
 
 ## Consecuencias / trade-offs
 
