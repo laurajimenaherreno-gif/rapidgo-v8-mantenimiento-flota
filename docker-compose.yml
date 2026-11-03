@@ -50,6 +50,21 @@ services:
       - --py-files
       - /opt/app/spark/reglas.py
       - /opt/app/spark/streaming_flota.py
+  airflow:
+    image: apache/airflow:3.2.2
+    container_name: rapidgo-v8-airflow
+    command: standalone
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "False"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      DATALAKE: /opt/airflow/datalake
+      _PIP_ADDITIONAL_REQUIREMENTS: pyarrow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./datalake:/opt/airflow/datalake
 
   # Lee el Data Lake y muestra conteos, particiones y offsets reales.
   # Se lanza con: docker compose run --rm verificar
