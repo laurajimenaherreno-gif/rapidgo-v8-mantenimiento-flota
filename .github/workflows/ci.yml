@@ -27,15 +27,22 @@ jobs:
           pip install -r requirements.txt
 
       - name: Validar sintaxis Python
-        run: python -m compileall producer spark tests airflow/dags   # CAMBIO 1
+        run: python -m compileall producer spark tests airflow/dags
 
       - name: Ejecutar pruebas (reglas, contrato y generador)
-        run: pytest -v
+        run: pytest -v --junitxml=reporte-pruebas.xml
+
+      - name: Guardar reporte de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-pruebas
+          path: reporte-pruebas.xml
 
       - name: Validar Docker Compose
         run: docker compose config --quiet
 
-  validar-dag:   # CAMBIO 2, job nuevo
+  validar-dag:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
@@ -56,4 +63,10 @@ jobs:
           AIRFLOW_HOME: /tmp/airflow
           AIRFLOW__CORE__LOAD_EXAMPLES: "False"
         run: pytest tests/test_dag.py -v
-        
+
+  quality-gate:
+    needs: [validar, validar-dag]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quality gate aprobado
+        run: echo "Sintaxis, pruebas, docker compose y DAG validados. Listo para crear el tag."
