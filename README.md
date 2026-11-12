@@ -51,7 +51,7 @@ Transversal: Docker + Git + GitHub + Kanban + GitHub Actions + Releases.
 ## Estado del proyecto
 - [x] Semana 1: diseño y organización (v0.1.0-foundation)
 - [x] Semana 2: pipeline Kafka → Spark → Data Lake y CI
-- [ ] Semana 3: Airflow, calidad y resiliencia
+- [x] Semana 3: Airflow, calidad y resiliencia
 - [ ] Semana 4: integración y release v1.0.0
 
 ## Tablero Kanban
